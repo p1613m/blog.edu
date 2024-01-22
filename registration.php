@@ -1,7 +1,6 @@
 <?php
 include 'includes/header.php';
 
-// todo: registration
 $errors = [];
 if (isset($_POST['submit'])) {
     $name = trim($_POST['name']);
@@ -19,7 +18,9 @@ if (isset($_POST['submit'])) {
 
     $emailExists = $db->prepare('SELECT * FROM users WHERE email = ?');
     $emailExists->execute([$email]);
-    d($emailExists);
+    if ($emailExists->fetch()) {
+        $errors['email'] = 'Email is exists';
+    }
 
     if (!$password) {
         $errors['password'] = 'Empty password';
@@ -37,8 +38,7 @@ if (isset($_POST['submit'])) {
             'password' => md5($password),
         ]);
 
-        header('Location: index.php');
-        exit;
+        redirect('index.php');
     }
 }
 ?>

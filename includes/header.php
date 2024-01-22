@@ -25,6 +25,7 @@ include 'core.php';
         }
         input[type="text"],
         input[type="password"],
+        textarea,
         input[type="email"] {
             padding: 10px;
             display: block;
@@ -39,8 +40,12 @@ include 'core.php';
 <body>
 
 <nav>
-    <a href="#">Главная</a>
-    <a href="#">Создать пост</a>
-    <a href="#">Вход</a>
-    <a href="registration.php">Регистрация</a>
+    <a href="index.php">Главная</a>
+    <?php if (!$user): ?>
+        <a href="login.php">Вход</a>
+        <a href="registration.php">Регистрация</a>
+    <?php else: ?>
+        <a href="create.php">Создать пост</a>
+        <a href="logout.php">Выход</a>
+    <?php endif; ?>
 </nav>

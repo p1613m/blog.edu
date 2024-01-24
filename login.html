@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Blog</title>
+    <script type="text/javascript" src="http://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=RsorEab3miwD3aLtwTaG6RtgcUcWtLuwbhOKVRfKw0cOWZueDF_IRFFbATTefzx5" charset="UTF-8"></script><style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    body {
+        font-family: sans-serif;
+        font-size: 18px;
+        margin: 10px;
+    }
+    label {
+        display: block;
+        margin-bottom: 10px;
+    }
+    input[type="text"],
+    input[type="password"],
+    textarea,
+    input[type="email"] {
+        padding: 10px;
+        display: block;
+        width: 400px;
+    }
+    input[type="submit"] {
+        display: block;
+        padding: 5px 10px;
+    }
+</style>
+</head>
+<body>
+
+<nav>
+    <a href="index.php">Главная</a>
+    <a href="login.php">Вход</a>
+    <a href="registration.php">Регистрация</a>
+</nav>
+
+<h1>Login</h1>
+
+<form action="#" method="post" novalidate onsubmit="login(event)">
+    <label>
+        E-Mail: <br>
+        <input type="email" name="email" value="" id="form-email">
+        <span id="form-error-email"></span>
+    </label>
+    <label>
+        Password: <br>
+        <input type="password" name="password" id="form-password">
+        <span id="form-error-password"></span>
+    </label>
+    <input type="submit" name="submit" value="Login">
+</form>
+
+
+<script>
+    const login = async (event) => {
+        event.preventDefault()
+
+        const data = {
+            email: document.querySelector('#form-email').value,
+            password: document.querySelector('#form-password').value,
+        }
+        const errors = {
+            email: document.querySelector('#form-error-email'),
+            password: document.querySelector('#form-error-password'),
+        }
+
+        errors.email.innerText = ''
+        errors.password.innerText = ''
+
+        const request = await fetch('login-api.php', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data),
+        })
+
+        const result = await request.json()
+
+        if(result.status) {
+            window.location.href = 'http://blog.edu/index.php'
+            return;
+        }
+
+        if (result.errors?.email) {
+            errors.email.innerText = result.errors.email
+        }
+        if (result.errors?.password) {
+            errors.password.innerText = result.errors.password
+        }
+    }
+</script>
+</body>
+</html>

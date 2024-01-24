@@ -1,6 +1,15 @@
 <?php
 include 'includes/header.php';
-$posts = $db->query('SELECT * FROM posts ORDER BY created_at DESC')->fetchAll();
+
+$page = (int) ($_GET['page'] ?? 1);
+$perPage = 3;
+$offset = ($page - 1) * $perPage;
+
+$posts = $db->query('SELECT * FROM posts ORDER BY created_at DESC LIMIT ' . $perPage . ' OFFSET ' . $offset)->fetchAll();
+
+if ($page > 1 && count($posts) === 0) {
+    redirect('index.php');
+}
 ?>
 
 <?php foreach ($posts as $post):
@@ -17,6 +26,21 @@ $posts = $db->query('SELECT * FROM posts ORDER BY created_at DESC')->fetchAll();
     </article>
 
 <?php endforeach; ?>
+
+<ul>
+    <?php
+    $countPosts = $db->query('SELECT count(*) AS count FROM posts')->fetch()['count'];
+    $countPages = ceil($countPosts / $perPage);
+    ?>
+
+    <?php for ($i = 1; $i <= $countPages; $i++): ?>
+        <li><a href="index.php?page=<?= $i ?>"
+                <?php if ($i === $page): ?>
+                    style="font-weight: bold;"
+                <?php endif; ?>
+            ><?= $i ?></a></li>
+    <?php endfor; ?>
+</ul>
 
 <?php
 include 'includes/footer.php';

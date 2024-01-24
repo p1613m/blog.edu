@@ -19,14 +19,14 @@ if (isset($_POST['submit'])) {
         'image/png' => 'png',
         'image/jpeg' => 'jpg',
     ];
-    if (!$image['size']) {
-        $errors['image'] = 'Field is required';
-    }
     if ($image['size'] > 5 * 1024 * 1024) {
         $errors['image'] = 'Max 5 MB';
     }
     if (!isset($acceptMimes[$image['type']])) {
         $errors['image'] = 'Incorrect type';
+    }
+    if (!$image['size']) {
+        $errors['image'] = 'Field is required';
     }
 
     if (!count($errors)) {

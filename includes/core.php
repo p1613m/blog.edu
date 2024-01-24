@@ -25,6 +25,15 @@ function getUser($id) {
     return $user->fetch();
 }
 
+function getPost($id) {
+    global $db;
+
+    $post = $db->prepare('SELECT * FROM posts WHERE id = ?');
+
+    $post->execute([$id]);
+    return $post->fetch();
+}
+
 $user = isset($_SESSION['user_id']) ? getUser($_SESSION['user_id']) : false;
 
 if (isset($forAuth) && $forAuth && !$user) {

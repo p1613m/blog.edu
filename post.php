@@ -1,10 +1,7 @@
 <?php
 include 'includes/header.php';
 
-$post = $db->prepare('SELECT * FROM posts WHERE id = ?');
-
-$post->execute([$_GET['id'] ?? 0]);
-$post = $post->fetch();
+$post = getPost($_GET['id'] ?? 0);
 
 if (!$post) {
     redirect('index.php');
@@ -18,3 +15,11 @@ $postUser = getUser($post['user_id']);
 <p><i><?= $post['created_at'] ?></i></p>
 <a href="#"><?= htmlspecialchars($postUser['name']) ?></a>
 <p><?= htmlspecialchars($post['content']) ?></p>
+
+<?php if ($user && $user['id'] == $post['user_id']): ?>
+    <br>
+    <p>
+        <a href="delete.php?id=<?= $post['id'] ?>">Удалить</a> |
+        <a href="edit.php?id=<?= $post['id'] ?>">Редактировать</a>
+    </p>
+<?php endif; ?>
